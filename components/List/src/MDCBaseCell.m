@@ -23,6 +23,7 @@
 @property(nonatomic, assign) CGPoint lastTouch;
 @property(strong, nonatomic, nonnull) MDCInkView *inkView;
 @property(strong, nonatomic, nonnull) MDCRippleView *rippleView;
+@property(strong, nonatomic, nonnull) UIColor *initialRippleViewRippleColor;
 
 @end
 
@@ -59,6 +60,7 @@
   [self addSubview:_inkView];
   if (!self.rippleView) {
     self.rippleView = [[MDCRippleView alloc] initWithFrame:self.bounds];
+    self.initialRippleViewRippleColor = self.rippleView.rippleColor;
   }
   _mdc_overrideBaseElevation = -1;
 }
@@ -161,10 +163,10 @@
 }
 
 - (void)setRippleColor:(UIColor *)rippleColor {
-  if ([self.rippleColor isEqual:rippleColor]) {
+  if (CGColorEqualToColor(self.rippleView.rippleColor.CGColor, rippleColor.CGColor)) {
     return;
   }
-  self.rippleView.rippleColor = rippleColor;
+  self.rippleView.rippleColor = rippleColor ?: self.initialRippleViewRippleColor;
 }
 
 - (UIColor *)rippleColor {
